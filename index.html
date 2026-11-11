@@ -1,176 +1,247 @@
-
 <!DOCTYPE html>
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>47都道府県 81マスゲーム</title>
+
 <style>
-*{box-sizing:border-box}
-body{
- margin:0;
- background:#101b3b;
- color:white;
- font-family:-apple-system,BlinkMacSystemFont,sans-serif;
- text-align:center;
+* {
+  box-sizing: border-box;
 }
-.app{
- max-width:560px;
- margin:auto;
- padding:10px;
- min-height:100vh;
- display:flex;
- flex-direction:column;
+
+body {
+  margin: 0;
+  background: #101b3b;
+  color: white;
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+  text-align: center;
 }
-h2{
- color:#ffdf75;
- margin:8px 0;
- font-size:22px;
+
+.app {
+  max-width: 560px;
+  margin: auto;
+  padding: 10px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
-.info{font-weight:bold;margin:8px}
-#count{color:#ffdf75;font-size:22px}
-.grid{
- width:min(94vw,500px);
- aspect-ratio:1;
- margin:auto;
- display:grid;
- grid-template-columns:repeat(9,1fr);
- grid-template-rows:repeat(9,1fr);
- gap:3px;
+
+h2 {
+  color: #ffdf75;
+  margin: 8px 0;
+  font-size: 22px;
 }
-.tile{
- min-width:0;
- min-height:0;
- border:1px solid #ffffff88;
- border-radius:4px;
- display:flex;
- align-items:center;
- justify-content:center;
- padding:1px;
- overflow:hidden;
- cursor:pointer;
- touch-action:manipulation;
+
+.info {
+  font-weight: bold;
+  margin: 8px;
 }
-.tile span{
- font-size:clamp(7px,2.2vw,12px);
- font-weight:bold;
- overflow-wrap:anywhere;
- line-height:1.15;
+
+#count {
+  color: #ffdf75;
+  font-size: 22px;
 }
-.tile.star span{font-size:clamp(12px,3.5vw,19px)}
+
+.grid {
+  width: min(94vw, 500px);
+  aspect-ratio: 1;
+  margin: auto;
+  display: grid;
+  grid-template-columns: repeat(9, 1fr);
+  grid-template-rows: repeat(9, 1fr);
+  gap: 3px;
+}
+
+.tile {
+  min-width: 0;
+  min-height: 0;
+  border: 1px solid #ffffff88;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1px;
+  overflow: hidden;
+  cursor: pointer;
+  touch-action: manipulation;
+  box-shadow: inset 0 0 0 1px #0002;
+}
+
+.tile span {
+  font-size: clamp(7px, 2.2vw, 12px);
+  font-weight: bold;
+  overflow-wrap: anywhere;
+  line-height: 1.15;
+  text-shadow: 0 1px 2px #0008;
+}
+
+.tile.star span {
+  font-size: clamp(12px, 3.5vw, 19px);
+}
 
 /* 地方別カラー */
-.tile.hokkaido{background:#3979b9}
-.tile.tohoku{background:#328b83}
-.tile.kanto{background:#548c45}
-.tile.chubu{background:#b17b32}
-.tile.kinki{background:#a45c91}
-.tile.chugoku{background:#397eaa}
-.tile.shikoku{background:#9a7840}
-.tile.kyushu{background:#b85b4c}
-.tile.star{
- background:linear-gradient(135deg,#53617c,#303d59);
- border-color:#e5d28c;
-}
-.tile.open{
- background-size:900% 900%;
- background-repeat:no-repeat;
- border:1px solid #ffffff55;
-}
-.tile.open span{display:none}
+.tile.hokkaido { background: #3979b9; }
+.tile.tohoku { background: #328b83; }
+.tile.kanto { background: #548c45; }
+.tile.chubu { background: #b17b32; }
+.tile.kinki { background: #a45c91; }
+.tile.chugoku { background: #397eaa; }
+.tile.shikoku { background: #9a7840; }
+.tile.kyushu { background: #b85b4c; }
 
-.buttons{
- display:grid;
- grid-template-columns:1fr 1fr;
- gap:7px;
- margin:12px 0;
+.tile.star {
+  background: linear-gradient(135deg, #53617c, #303d59);
+  border-color: #e5d28c;
 }
-button{
- border:0;
- border-radius:9px;
- padding:12px 4px;
- font-size:14px;
- font-weight:bold;
- background:#34558b;
- color:white;
- cursor:pointer;
+
+/* OPENしたマス */
+.tile.open {
+  background-repeat: no-repeat;
+  background-color: transparent;
+  border: 1px solid #ffffff55;
+  box-shadow: none;
 }
-button:active{opacity:.7}
-.primary{background:#c18c2c;color:#111}
-.all{background:#168c71}
-.reset{background:#873e50}
-.photo{margin:5px;font-size:13px}
-#status{
- font-size:12px;
- color:#d5dcef;
- margin:5px;
+
+.tile.open span {
+  display: none;
 }
-.legend{
- display:flex;
- flex-wrap:wrap;
- justify-content:center;
- gap:5px 10px;
- width:min(94vw,500px);
- margin:8px auto 2px;
- font-size:11px;
+
+.buttons {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 7px;
+  margin: 12px 0;
 }
-.legend span{
- display:inline-flex;
- align-items:center;
- gap:4px;
+
+button {
+  border: 0;
+  border-radius: 9px;
+  padding: 12px 4px;
+  font-size: 14px;
+  font-weight: bold;
+  background: #34558b;
+  color: white;
+  cursor: pointer;
 }
-.dot{
- width:10px;
- height:10px;
- border-radius:2px;
- display:inline-block;
+
+button:active {
+  opacity: .7;
 }
-@media(max-height:650px){
- .app{padding:5px}
- h2{font-size:18px;margin:3px}
- .grid{width:min(90vw,65vh,440px)}
- button{padding:8px 3px;font-size:12px}
- .legend{font-size:10px;margin:5px auto}
+
+.primary {
+  background: #c18c2c;
+  color: #111;
+}
+
+.all {
+  background: #168c71;
+}
+
+.reset {
+  background: #873e50;
+}
+
+.photo {
+  margin: 5px;
+  font-size: 13px;
+}
+
+#status {
+  font-size: 12px;
+  color: #d5dcef;
+  margin: 5px;
+}
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 5px 10px;
+  width: min(94vw, 500px);
+  margin: 8px auto 2px;
+  font-size: 11px;
+}
+
+.legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+  display: inline-block;
+}
+
+@media(max-height: 650px) {
+  .app {
+    padding: 5px;
+  }
+
+  h2 {
+    font-size: 18px;
+    margin: 3px;
+  }
+
+  .grid {
+    width: min(90vw, 65vh, 440px);
+  }
+
+  button {
+    padding: 8px 3px;
+    font-size: 12px;
+  }
+
+  .legend {
+    font-size: 10px;
+    margin: 5px auto;
+  }
 }
 </style>
 </head>
 
 <body>
+
 <div class="app">
 
 <h2>🗾 47都道府県を見つけよう！</h2>
+
 <div>⭐や都道府県をタップして写真をOPENしよう！</div>
 
 <div class="info">
- OPENしたマス
- <div id="count">0 / 81</div>
+  OPENしたマス
+  <div id="count">0 / 81</div>
 </div>
 
 <div class="grid" id="grid"></div>
 
+<!-- 地方別カラー表示 -->
 <div class="legend">
- <span><i class="dot" style="background:#3979b9"></i>北海道</span>
- <span><i class="dot" style="background:#328b83"></i>東北</span>
- <span><i class="dot" style="background:#548c45"></i>関東</span>
- <span><i class="dot" style="background:#b17b32"></i>中部</span>
- <span><i class="dot" style="background:#a45c91"></i>近畿</span>
- <span><i class="dot" style="background:#397eaa"></i>中国</span>
- <span><i class="dot" style="background:#9a7840"></i>四国</span>
- <span><i class="dot" style="background:#b85b4c"></i>九州・沖縄</span>
- <span><i class="dot" style="background:#53617c"></i>⭐</span>
+  <span><i class="dot" style="background:#3979b9"></i>北海道</span>
+  <span><i class="dot" style="background:#328b83"></i>東北</span>
+  <span><i class="dot" style="background:#548c45"></i>関東</span>
+  <span><i class="dot" style="background:#b17b32"></i>中部</span>
+  <span><i class="dot" style="background:#a45c91"></i>近畿</span>
+  <span><i class="dot" style="background:#397eaa"></i>中国</span>
+  <span><i class="dot" style="background:#9a7840"></i>四国</span>
+  <span><i class="dot" style="background:#b85b4c"></i>九州・沖縄</span>
+  <span><i class="dot" style="background:#53617c"></i>⭐</span>
 </div>
 
 <div class="buttons">
- <button class="primary" onclick="openNext()">⭐ 次の1マスOPEN</button>
- <button onclick="openRandom()">🔀 ランダムOPEN</button>
- <button onclick="undo()">↩ 1マス戻す</button>
- <button class="all" onclick="openAll()">🎉 全てOPEN</button>
- <button class="reset" onclick="resetBoard()">⟲ 全81マスリセット</button>
+  <button class="primary" onclick="openNext()">⭐ 次の1マスOPEN</button>
+  <button onclick="openRandom()">🔀 ランダムOPEN</button>
+  <button onclick="undo()">↩ 1マス戻す</button>
+  <button class="all" onclick="openAll()">🎉 全てOPEN</button>
+  <button class="reset" onclick="resetBoard()">⟲ 全81マスリセット</button>
 </div>
 
 <div class="photo">
- 写真を選択：
- <input type="file" id="photo" accept="image/*">
+  写真を選択：
+  <input type="file" id="photo" accept="image/*">
 </div>
 
 <div id="status">写真を選んでスタート！</div>
@@ -178,225 +249,316 @@ button:active{opacity:.7}
 </div>
 
 <script>
+
+// 47都道府県
 const prefectures = [
- {label:"北海道",region:"hokkaido"},
 
- {label:"青森県",region:"tohoku"},
- {label:"岩手県",region:"tohoku"},
- {label:"宮城県",region:"tohoku"},
- {label:"秋田県",region:"tohoku"},
- {label:"山形県",region:"tohoku"},
- {label:"福島県",region:"tohoku"},
+  {label:"北海道",region:"hokkaido"},
 
- {label:"茨城県",region:"kanto"},
- {label:"栃木県",region:"kanto"},
- {label:"群馬県",region:"kanto"},
- {label:"埼玉県",region:"kanto"},
- {label:"千葉県",region:"kanto"},
- {label:"東京都",region:"kanto"},
- {label:"神奈川県",region:"kanto"},
+  {label:"青森県",region:"tohoku"},
+  {label:"岩手県",region:"tohoku"},
+  {label:"宮城県",region:"tohoku"},
+  {label:"秋田県",region:"tohoku"},
+  {label:"山形県",region:"tohoku"},
+  {label:"福島県",region:"tohoku"},
 
- {label:"新潟県",region:"chubu"},
- {label:"富山県",region:"chubu"},
- {label:"石川県",region:"chubu"},
- {label:"福井県",region:"chubu"},
- {label:"山梨県",region:"chubu"},
- {label:"長野県",region:"chubu"},
- {label:"岐阜県",region:"chubu"},
- {label:"静岡県",region:"chubu"},
- {label:"愛知県",region:"chubu"},
+  {label:"茨城県",region:"kanto"},
+  {label:"栃木県",region:"kanto"},
+  {label:"群馬県",region:"kanto"},
+  {label:"埼玉県",region:"kanto"},
+  {label:"千葉県",region:"kanto"},
+  {label:"東京都",region:"kanto"},
+  {label:"神奈川県",region:"kanto"},
 
- {label:"三重県",region:"kinki"},
- {label:"滋賀県",region:"kinki"},
- {label:"京都府",region:"kinki"},
- {label:"大阪府",region:"kinki"},
- {label:"兵庫県",region:"kinki"},
- {label:"奈良県",region:"kinki"},
- {label:"和歌山県",region:"kinki"},
+  {label:"新潟県",region:"chubu"},
+  {label:"富山県",region:"chubu"},
+  {label:"石川県",region:"chubu"},
+  {label:"福井県",region:"chubu"},
+  {label:"山梨県",region:"chubu"},
+  {label:"長野県",region:"chubu"},
+  {label:"岐阜県",region:"chubu"},
+  {label:"静岡県",region:"chubu"},
+  {label:"愛知県",region:"chubu"},
 
- {label:"鳥取県",region:"chugoku"},
- {label:"島根県",region:"chugoku"},
- {label:"岡山県",region:"chugoku"},
- {label:"広島県",region:"chugoku"},
- {label:"山口県",region:"chugoku"},
+  {label:"三重県",region:"kinki"},
+  {label:"滋賀県",region:"kinki"},
+  {label:"京都府",region:"kinki"},
+  {label:"大阪府",region:"kinki"},
+  {label:"兵庫県",region:"kinki"},
+  {label:"奈良県",region:"kinki"},
+  {label:"和歌山県",region:"kinki"},
 
- {label:"徳島県",region:"shikoku"},
- {label:"香川県",region:"shikoku"},
- {label:"愛媛県",region:"shikoku"},
- {label:"高知県",region:"shikoku"},
+  {label:"鳥取県",region:"chugoku"},
+  {label:"島根県",region:"chugoku"},
+  {label:"岡山県",region:"chugoku"},
+  {label:"広島県",region:"chugoku"},
+  {label:"山口県",region:"chugoku"},
 
- {label:"福岡県",region:"kyushu"},
- {label:"佐賀県",region:"kyushu"},
- {label:"長崎県",region:"kyushu"},
- {label:"熊本県",region:"kyushu"},
- {label:"大分県",region:"kyushu"},
- {label:"宮崎県",region:"kyushu"},
- {label:"鹿児島県",region:"kyushu"},
- {label:"沖縄県",region:"kyushu"}
+  {label:"徳島県",region:"shikoku"},
+  {label:"香川県",region:"shikoku"},
+  {label:"愛媛県",region:"shikoku"},
+  {label:"高知県",region:"shikoku"},
+
+  {label:"福岡県",region:"kyushu"},
+  {label:"佐賀県",region:"kyushu"},
+  {label:"長崎県",region:"kyushu"},
+  {label:"熊本県",region:"kyushu"},
+  {label:"大分県",region:"kyushu"},
+  {label:"宮崎県",region:"kyushu"},
+  {label:"鹿児島県",region:"kyushu"},
+  {label:"沖縄県",region:"kyushu"}
+
 ];
 
-let items=[];
-let opened=[];
-let photoURL="";
+let items = [];
+let opened = [];
+let photoURL = "";
+let squarePhotoURL = "";
 
-const grid=document.getElementById("grid");
-const count=document.getElementById("count");
-const status=document.getElementById("status");
+const grid = document.getElementById("grid");
+const count = document.getElementById("count");
+const status = document.getElementById("status");
 
-function shuffle(array){
- const a=[...array];
- for(let i=a.length-1;i>0;i--){
-  const j=Math.floor(Math.random()*(i+1));
-  [a[i],a[j]]=[a[j],a[i]];
- }
- return a;
-}
+// 配列をシャッフル
+function shuffle(array) {
+  const a = [...array];
 
-function createBoard(){
-
- const stars=Array.from(
-  {length:34},
-  ()=>({type:"star",label:"⭐"})
- );
-
- const places=prefectures.map(p=>({
-  type:"prefecture",
-  ...p
- }));
-
- // 47都道府県と34個の星をランダム配置
- items=shuffle([...places,...stars]);
-
- opened=[];
- render();
-}
-
-function render(){
-
- grid.innerHTML="";
-
- items.forEach((item,i)=>{
-
-  const tile=document.createElement("div");
-  tile.className="tile";
-
-  if(item.type==="star"){
-   tile.classList.add("star");
-  }else{
-   tile.classList.add(item.region);
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
   }
 
-  const span=document.createElement("span");
-  span.textContent=item.label;
-  tile.appendChild(span);
+  return a;
+}
 
-  if(opened.includes(i)){
+// ゲームを作成
+function createBoard() {
 
-   tile.classList.add("open");
+  const stars = Array.from(
+    {length: 34},
+    () => ({type:"star", label:"⭐"})
+  );
 
-   if(photoURL){
+  items = shuffle([
+    ...prefectures.map(p => ({
+      type:"prefecture",
+      ...p
+    })),
+    ...stars
+  ]);
 
-    const x=(i%9)*12.5;
-    const y=Math.floor(i/9)*12.5;
+  opened = [];
 
-    tile.style.backgroundImage=`url("${photoURL}")`;
-    tile.style.backgroundPosition=`${x}% ${y}%`;
+  render();
+}
 
-   }else{
-    tile.style.background="#263b69";
-   }
-  }
+// 画面描画
+function render() {
 
-  tile.addEventListener("click",()=>{
-   openTile(i);
+  grid.innerHTML = "";
+
+  items.forEach((item, i) => {
+
+    const tile = document.createElement("div");
+
+    tile.className = "tile";
+
+    tile.classList.add(
+      item.type === "star" ? "star" : item.region
+    );
+
+    const span = document.createElement("span");
+    span.textContent = item.label;
+
+    tile.appendChild(span);
+
+    if (opened.includes(i)) {
+
+      tile.classList.add("open");
+
+      if (squarePhotoURL) {
+
+        const x = i % 9;
+        const y = Math.floor(i / 9);
+
+        tile.style.backgroundImage =
+          `url("${squarePhotoURL}")`;
+
+        tile.style.backgroundSize = "900% 900%";
+
+        tile.style.backgroundPosition =
+          `${x * 12.5}% ${y * 12.5}%`;
+
+      } else {
+
+        tile.style.background = "#263b69";
+
+      }
+    }
+
+    tile.addEventListener("click", () => openTile(i));
+
+    grid.appendChild(tile);
+
   });
 
-  grid.appendChild(tile);
+  count.textContent = opened.length + " / 81";
 
- });
+  status.textContent =
+    opened.length === 81
+      ? "🎉 全81マスOPEN！完成！"
+      : opened.length + "マスOPEN中";
 
- count.textContent=opened.length+" / 81";
-
- if(opened.length===81){
-  status.textContent="🎉 全81マスOPEN！完成！";
- }else{
-  status.textContent=opened.length+"マスOPEN中";
- }
 }
 
-function openTile(i){
+// 1マスOPEN
+function openTile(i) {
 
- if(opened.includes(i))return;
+  if (opened.includes(i)) return;
 
- opened.push(i);
- render();
+  opened.push(i);
+
+  render();
 }
 
-function openNext(){
+// 次の1マスOPEN
+function openNext() {
 
- const i=items.findIndex(
-  (_,i)=>!opened.includes(i)
- );
+  const i = items.findIndex(
+    (_, i) => !opened.includes(i)
+  );
 
- if(i!==-1)openTile(i);
+  if (i !== -1) openTile(i);
 }
 
-function openRandom(){
+// ランダムOPEN
+function openRandom() {
 
- const remaining=items
-  .map((_,i)=>i)
-  .filter(i=>!opened.includes(i));
+  const available = items
+    .map((_, i) => i)
+    .filter(i => !opened.includes(i));
 
- if(remaining.length===0)return;
+  if (available.length) {
 
- const i=remaining[
-  Math.floor(Math.random()*remaining.length)
- ];
+    const i = available[
+      Math.floor(Math.random() * available.length)
+    ];
 
- openTile(i);
+    openTile(i);
+  }
 }
 
-function undo(){
+// 1マス戻す
+function undo() {
 
- if(opened.length===0)return;
+  if (opened.length) {
 
- opened.pop();
- render();
+    opened.pop();
+
+    render();
+  }
 }
 
-function openAll(){
+// 全てOPEN
+function openAll() {
 
- opened=items.map((_,i)=>i);
- render();
+  opened = items.map((_, i) => i);
+
+  render();
 }
 
-function resetBoard(){
+// 全81マスリセット
+function resetBoard() {
 
- createBoard();
- status.textContent="⭐ 新しい配置にしました！";
+  createBoard();
+
+  status.textContent = "⭐ 新しい配置にしました！";
 }
 
+// 写真読み込み
 document.getElementById("photo")
-.addEventListener("change",function(e){
+.addEventListener("change", function(e) {
 
- const file=e.target.files[0];
+  const file = e.target.files[0];
 
- if(!file)return;
+  if (!file) return;
 
- if(photoURL){
-  URL.revokeObjectURL(photoURL);
- }
+  if (photoURL) {
+    URL.revokeObjectURL(photoURL);
+  }
 
- photoURL=URL.createObjectURL(file);
- render();
+  photoURL = URL.createObjectURL(file);
 
- status.textContent="📷 写真を設定しました！";
+  const img = new Image();
+
+  img.onload = () => {
+
+    /*
+      画像を中央で正方形に切り出します。
+      色味の変更やフィルター加工は行いません。
+    */
+
+    const side = Math.min(
+      img.naturalWidth,
+      img.naturalHeight
+    );
+
+    const sx = Math.floor(
+      (img.naturalWidth - side) / 2
+    );
+
+    const sy = Math.floor(
+      (img.naturalHeight - side) / 2
+    );
+
+    const canvas = document.createElement("canvas");
+
+    canvas.width = 900;
+    canvas.height = 900;
+
+    const ctx = canvas.getContext("2d");
+
+    // 元画像をそのまま描画
+    ctx.drawImage(
+      img,
+      sx,
+      sy,
+      side,
+      side,
+      0,
+      0,
+      900,
+      900
+    );
+
+    squarePhotoURL = canvas.toDataURL("image/png");
+
+    render();
+
+    status.textContent =
+      "📷 写真を設定しました！（元の色味で表示）";
+
+    URL.revokeObjectURL(photoURL);
+
+    photoURL = "";
+
+  };
+
+  img.onerror = () => {
+
+    status.textContent =
+      "画像を読み込めませんでした。別の写真を選んでください。";
+
+  };
+
+  img.src = photoURL;
+
 });
 
-// ゲーム開始
+// 初期化
 createBoard();
 
 </script>
+
 </body>
 </html>
-
